@@ -1,15 +1,12 @@
 PODS:
   - Alamofire (4.5.0)
-  - Pulley (1.4)
 
 DEPENDENCIES:
   - Alamofire (~> 4.4)
-  - Pulley
 
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  Pulley: 3d47a5ca819b8f35a63e9a4811d35035d484d1d9
 
-PODFILE CHECKSUM: b14e69673db4e2e49e6ab5847acc919a97e05a91
+PODFILE CHECKSUM: c4afd3524ddcf933ff9b6cade27e7668f721e3f2
 
 COCOAPODS: 1.2.1

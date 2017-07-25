@@ -26,9 +26,6 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         getWeeklyWeatherForecast()
         
-        //weaklyForecastTV.reloadData()
-        
-        //weaklyForecastTV.backgroundColor = UIColor.clear
         
     }
     
@@ -153,15 +150,8 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                             
                         }
                         
-                        //self.weaklyForecastTV.reloadData()
-                        
-                        self.do_table_refresh()
-                        
-                        let userDefaults = UserDefaults.standard
-                        userDefaults.set(cityID, forKey: "cityID")
-                        
-                        userDefaults.synchronize()
-                        
+                        self.weaklyForecastTV.reloadData()
+            
                     }
                     
                     
@@ -170,13 +160,8 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
     }
     
-    func do_table_refresh()
-    {
-        DispatchQueue.main.async(execute: {
-            //self.weaklyForecastTV.reloadData()
-            print("reloaded")
-            return
-        })
+    func reloadTableData(_ notification: Notification) {
+        weaklyForecastTV.reloadData()
     }
 
     
@@ -209,3 +194,4 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
 
 }
+

@@ -7,6 +7,5 @@ target 'WeatherForecast' do
 
   # Pods for WeatherForecast
   pod 'Alamofire', '~> 4.4'
-  pod 'Pulley'
 
 end

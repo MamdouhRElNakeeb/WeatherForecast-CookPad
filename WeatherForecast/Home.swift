@@ -147,6 +147,16 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
     
     func getWeatherByCityID(){
      
+        let utils: Utils = Utils()
+        
+        if !utils.isConnectedToNetwork(){
+            let alert = UIAlertController(title: "Alert", message: "There's problem connecting the internet", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Try again later", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        
         let userDefaults = UserDefaults.standard
         var cityID: Int = 0
         
@@ -274,6 +284,7 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
                        
                         userDefaults.synchronize()
                         
+                        
                     }
                     
                     
@@ -286,6 +297,14 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         
         openSearchVC()
         
+    }
+    
+    @IBAction func weaklyMenuBtn(_ sender: Any) {
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let weakyVC = storyBoard.instantiateViewController(withIdentifier: "Days7ForecastVC") as! Days7ForecastVC
+        
+        self.navigationController?.pushViewController(weakyVC, animated: true)
     }
     
     func openSearchVC() {
