@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import Pulley
 
 class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -26,7 +27,7 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         getWeeklyWeatherForecast()
         
-        
+       
     }
     
     func getWeeklyWeatherForecast(){
@@ -150,10 +151,9 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                             
                         }
                         
-                        DispatchQueue.main.async {
-                    
-                            self.weaklyForecastTV.reloadData()
-                        }
+                        
+                        self.weaklyForecastTV.reloadData()
+                        
                     }
                     
                     
@@ -161,6 +161,11 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         
     }
+    
+    func reloadTableData(_ notification: Notification) {
+        weaklyForecastTV.reloadData()
+    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysForecastArr.count
@@ -190,5 +195,29 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
 
+}
+
+
+extension Days7ForecastVC: PulleyDrawerViewControllerDelegate {
+    
+    func collapsedDrawerHeight() -> CGFloat
+    {
+        return 68.0
+    }
+    
+    func partialRevealDrawerHeight() -> CGFloat
+    {
+        return 264.0
+    }
+    
+    func supportedDrawerPositions() -> [PulleyPosition] {
+        return PulleyPosition.all // You can specify the drawer positions you support. This is the same as: [.open, .partiallyRevealed, .collapsed, .closed]
+    }
+    
+    func drawerPositionDidChange(drawer: PulleyViewController)
+    {
+        weaklyForecastTV.isScrollEnabled = drawer.drawerPosition == .open
+        
+    }
 }
 

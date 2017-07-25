@@ -27,49 +27,9 @@ class SearchVC: UIViewController ,UITableViewDataSource,UITableViewDelegate , UI
 
         // Do any additional setup after loading the view.
       
-        readJson()
         configureSearchController()
     }
     
-    
-    private func readJson() {
-        
-        do {
-            if let file = Bundle.main.url(forResource: "city", withExtension: "json") {
-                let data = try Data(contentsOf: file)
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                if let citiesData = json as? NSArray {
-                    // json is an array
-                    
-                    
-                    for cityItem in citiesData{
-                     
-                        
-                        let id = (cityItem as AnyObject).value(forKey: "id") as! Int
-                        let city = (cityItem as AnyObject).value(forKey: "name") as! String
-                        let country = (cityItem as AnyObject).value(forKey: "country") as! String
-                        
-                        print(city + ", " + country)
-                        
-                        self.cityData.append(City.init(id: id, name: city, country: country))
-                        
-                    }
-                    
-                    tblSearch.reloadData()
-                    
-                } else {
-                    print("JSON is invalid")
-                }
-            } else {
-                print("no file")
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
- 
-    }
-
-
     func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false

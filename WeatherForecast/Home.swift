@@ -26,6 +26,8 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
     @IBOutlet weak var monthNameL: UILabel!
     
     
+    var cityData = [City]()
+    
     var selectedCityID: Int = 0
     
     /*
@@ -64,6 +66,10 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         dayWeatherIcon.image = image
         
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        readJson()
     }
     
     func initViews (){
@@ -111,19 +117,52 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
     }
     */
     
-    func addDays7ForecastView(scrollable: Bool? = true) {
-        let days7ForecastVC = scrollable! ? Days7ForecastVC() : UIViewController()
+    private func readJson() {
         
-        days7ForecastVC.view.isHidden = true
+        if cityData.count == 0{
         
-        self.addChildViewController(days7ForecastVC)
-        self.view.addSubview(days7ForecastVC.view)
-        days7ForecastVC.didMove(toParentViewController: self)
+            DispatchQueue.global().async {
+                do {
+                    if let file = Bundle.main.url(forResource: "city", withExtension: "json") {
+                        let data = try Data(contentsOf: file)
+                        let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        if let citiesData = json as? NSArray {
+                            // json is an array
+                            
+                            
+                            for cityItem in citiesData{
+                                
+                                
+                                let id = (cityItem as AnyObject).value(forKey: "id") as! Int
+                                let city = (cityItem as AnyObject).value(forKey: "name") as! String
+                                let country = (cityItem as AnyObject).value(forKey: "country") as! String
+                                
+                                print(city + ", " + country)
+                                
+                                self.cityData.append(City.init(id: id, name: city, country: country))
+                                
+                            }
+                            
+                            //tblSearch.reloadData()
+                            
+                        } else {
+                            print("JSON is invalid")
+                        }
+                    } else {
+                        print("no file")
+                    }
+                } catch {
+                    print(error.localizedDescription)
+                }
+                
+            }
+            
+        }
         
-        let height = view.frame.height
-        let width  = view.frame.width
-        days7ForecastVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
+        
     }
+    
+
     
     func getWeatherByCityID(){
      
@@ -135,7 +174,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        
         
         let userDefaults = UserDefaults.standard
         var cityID: Int = 0
@@ -264,7 +302,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
                        
                         userDefaults.synchronize()
                         
-                        
                     }
                     
                     
@@ -279,20 +316,13 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         
     }
     
-    @IBAction func weaklyMenuBtn(_ sender: Any) {
-        
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let weakyVC = storyBoard.instantiateViewController(withIdentifier: "Days7ForecastVC") as! Days7ForecastVC
-        
-        self.navigationController?.pushViewController(weakyVC, animated: true)
-    }
-    
     func openSearchVC() {
         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let searchVC = storyBoard.instantiateViewController(withIdentifier: "SearchVC") as! SearchVC
     
         searchVC.delegate = self
+        searchVC.cityData = self.cityData
         self.navigationController?.pushViewController(searchVC, animated: true)
         
     }
