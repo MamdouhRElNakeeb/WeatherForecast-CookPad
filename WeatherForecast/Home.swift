@@ -66,12 +66,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-        super.viewDidAppear(animated)
-        addWeeklyForecastView()
-    }
-    
     func initViews (){
         
         self.currentTempL.center = self.view.center
@@ -129,20 +123,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         let height = view.frame.height
         let width  = view.frame.width
         days7ForecastVC.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
-    }
-    
-    func addSearchView(scrollable: Bool? = true) {
-        let searchVC = scrollable! ? SearchVC() : UIViewController()
-        
-        //searchVC.view.isHidden = true
-        
-        self.addChildViewController(searchVC)
-        self.view.addSubview(searchVC.view)
-        searchVC.didMove(toParentViewController: self)
-        
-        let height = view.frame.height
-        let width  = view.frame.width
-        searchVC.view.frame = CGRect(x: 0, y: self.view.frame.minY, width: width, height: height)
     }
     
     func getWeatherByCityID(){

@@ -150,8 +150,10 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                             
                         }
                         
-                        self.weaklyForecastTV.reloadData()
-            
+                        DispatchQueue.main.async {
+                    
+                            self.weaklyForecastTV.reloadData()
+                        }
                     }
                     
                     
@@ -159,11 +161,6 @@ class Days7ForecastVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         
     }
-    
-    func reloadTableData(_ notification: Notification) {
-        weaklyForecastTV.reloadData()
-    }
-
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return daysForecastArr.count
