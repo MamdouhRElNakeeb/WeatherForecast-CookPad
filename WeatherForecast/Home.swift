@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import CoreLocation
 import Alamofire
 
-class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
+class Home: UIViewController, SearchVCDelegate {
 
     @IBOutlet weak var dayWeatherIcon: UIImageView!
     @IBOutlet weak var minMaxV: UIView!
@@ -30,32 +29,12 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
     
     var selectedCityID: Int = 0
     
-    /*
-    let locationManager = CLLocationManager()
-    
-    var locValue = CLLocationCoordinate2D()
-    */
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         initDate()
         initViews()
-        
-        /*
-        // Ask for Authorisation from the User.
-        self.locationManager.requestAlwaysAuthorization()
-        
-        // For use in foreground
-        self.locationManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-        }
-        */
         
         getWeatherByCityID()
         _ = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(getWeatherByCityID), userInfo: nil, repeats: true)
@@ -106,16 +85,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
         days7Forecast.view.frame = CGRect(x: 0, y: self.view.frame.maxY, width: width, height: height)
     }
     
-    /*
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locValue = manager.location!.coordinate
-        
-        //print("locations = \(locValue.latitude) \(locValue.longitude)")
-        
-        //getWeatherForecast(locValue: locValue)
-        
-    }
-    */
     
     private func readJson() {
         
@@ -191,7 +160,7 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
             + "&appid=e5b66a0e0cf10b283e6845a11a0d6628"
         
         
-        Alamofire.request(url /*"http://api.openweathermap.org/data/2.5/weather", method: .post, parameters: parameters*/)
+        Alamofire.request(url)
             .responseString{
                 
                 response in
@@ -201,7 +170,6 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
                 //return
                 let data = response.value?.data(using: .utf8)!
                 
-                // let response2 = try? JSONSerialization.jsonObject(with: data!) as! [String:Any]
                 
                 //getting the json value from the server
                 if let result = try? JSONSerialization.jsonObject(with: data!) as! [String:Any] {
@@ -212,7 +180,7 @@ class Home: UIViewController, /*CLLocationManagerDelegate,*/ SearchVCDelegate {
                     print(code)
                     
                     if code == 500{
-                        //let errMsg = jsonData["mesasage"] as! String
+
                         let alert = UIAlertController(title: "Error", message: "An error occurred", preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
